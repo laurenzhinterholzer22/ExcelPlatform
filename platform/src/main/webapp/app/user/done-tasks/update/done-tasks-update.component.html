@@ -1,0 +1,39 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myAdminTaskLabel">Beispiel bearbeiten</h2>
+
+      <div *ngIf="userTaskMeta">
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="!userTask.id">
+          <label>ID</label>
+          <input type="text" class="form-control" name="id" formControlName="id" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="fileUploadSubmissionExcel">Upload Abgabe Excel: </label>
+          <jhi-file-upload
+            [disabled]="false"
+            id="fileUploadSubmissionExcel"
+            [fileId]="submissionExcel"
+            (fileAdded)="handleFileAddedSubmissionExcel($event)"
+            (fileRemoved)="handleFileRemovedSubmissionExcel($event)"
+            (fileModified)="handleFileMovedSubmissionExcel($event[0], $event[1])"
+          >
+          </jhi-file-upload>
+        </div>
+      </div>
+
+      <div *ngIf="userTask">
+        <button type="button" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button type="submit" [disabled]="editForm.invalid || isSaving || submissionExcel == -1" class="btn btn-primary">
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

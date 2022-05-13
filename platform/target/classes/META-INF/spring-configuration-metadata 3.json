@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "at.jku.platform.config.ApplicationProperties",
+      "sourceType": "at.jku.platform.config.ApplicationProperties"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

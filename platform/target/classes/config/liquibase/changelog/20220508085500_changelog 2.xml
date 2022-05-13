@@ -1,0 +1,96 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-3">
+        <createTable tableName="admin_task">
+            <column autoIncrement="true" name="admin_task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="admin_taskPK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="instruction_excel" type="BIGINT"/>
+            <column name="instruction_pdf" type="BIGINT"/>
+            <column name="solution_excel" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-4">
+        <createTable tableName="file">
+            <column autoIncrement="true" name="file_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="filePK"/>
+            </column>
+            <column name="content" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_type" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="submit_time" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_extra" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-5">
+        <createTable tableName="user_extra">
+            <column name="user_extra_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_extraPK"/>
+            </column>
+            <column name="solved_exercises" type="INTEGER"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-6">
+        <createTable tableName="user_task">
+            <column autoIncrement="true" name="user_task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_taskPK"/>
+            </column>
+            <column name="is_correct" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="admin_task" type="BIGINT"/>
+            <column name="instruction_user_excel" type="BIGINT"/>
+            <column name="submission_excel" type="BIGINT"/>
+            <column name="user_extra" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-7">
+        <addForeignKeyConstraint baseColumnNames="admin_task" baseTableName="user_task" constraintName="FK15m68315rny09qbx1arphfptk" deferrable="false" initiallyDeferred="false" referencedColumnNames="admin_task_id" referencedTableName="admin_task" validate="true" deleteCascade="true"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-8">
+        <addForeignKeyConstraint baseColumnNames="submission_excel" baseTableName="user_task" constraintName="FK1b12n0wht3bdapmg9ubd0h0uc" deferrable="false" initiallyDeferred="false" referencedColumnNames="file_id" referencedTableName="file" validate="true" onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-9">
+        <addForeignKeyConstraint baseColumnNames="instruction_excel" baseTableName="admin_task" constraintName="FK292lwlhukabnas1kqkxeyjcon" deferrable="false" initiallyDeferred="false" referencedColumnNames="file_id" referencedTableName="file" validate="true" onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-10">
+        <addForeignKeyConstraint baseColumnNames="instruction_user_excel" baseTableName="user_task" constraintName="FK2f5kodqpyvixmsby6tn5ehx1r" deferrable="false" initiallyDeferred="false" referencedColumnNames="file_id" referencedTableName="file" validate="true" onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-11">
+        <addForeignKeyConstraint baseColumnNames="user_extra" baseTableName="user_task" constraintName="FK61fpn0gddvhxrj1x57lcqsuxl" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_extra_id" referencedTableName="user_extra" validate="true" deleteCascade="true"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-12">
+        <addForeignKeyConstraint baseColumnNames="instruction_pdf" baseTableName="admin_task" constraintName="FKd76wsmqoljylviru84ujyewnn" deferrable="false" initiallyDeferred="false" referencedColumnNames="file_id" referencedTableName="file" validate="true" onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-13">
+        <addForeignKeyConstraint baseColumnNames="user_extra" baseTableName="file" constraintName="FKeg28uhs0qta8a6058395xgwj7" deferrable="false" initiallyDeferred="false" referencedColumnNames="user_extra_id" referencedTableName="user_extra" validate="true" deleteCascade="true"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-14">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_extra" constraintName="FKj6o22j2hl0suca5i7f77olhro" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true" deleteCascade="true"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-15">
+        <addForeignKeyConstraint baseColumnNames="solution_excel" baseTableName="admin_task" constraintName="FKrncde614qory4b5vtbk94jjg1" deferrable="false" initiallyDeferred="false" referencedColumnNames="file_id" referencedTableName="file" validate="true" onDelete="SET NULL"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-1">
+        <alterSequence sequenceName="hibernate_sequence"/>
+    </changeSet>
+    <changeSet author="laurenzhinterholzer (generated)" id="1652000108901-2">
+        <alterSequence sequenceName="sequence_generator"/>
+    </changeSet>
+</databaseChangeLog>

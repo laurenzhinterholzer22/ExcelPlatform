@@ -1,0 +1,80 @@
+<div>
+  <h2>
+    <span id="admin-task-page-heading" data-cy="adminTaskPageHeading">Admin Beispiele</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon> <span>neues Beispiel erstellen</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="table-responsive" *ngIf="adminTasks">
+    <table class="table table-striped" aria-describedby="admin-task-page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
+          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th><span>Beispiel Name</span></th>
+          <th><span>Angabe Excel</span></th>
+          <th><span>Angabe PDF</span></th>
+          <th><span>Lösung Excel</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="adminTasks">
+        <tr *ngFor="let adminTask of adminTasks">
+          <td>{{ adminTask.id }}</td>
+          <td>{{ adminTask.name }}</td>
+          <!--        <td *ngIf="adminTask.pop() !== undefined">-->
+          <!--            <jhi-file-download [fileId]="adminTask.instruction_excel"> </jhi-file-download>-->
+          <!--        </td>-->
+          <td *ngIf="adminTask.instruction_excel != undefined">
+            <jhi-file-download [fileId]="adminTask.instruction_excel"> </jhi-file-download>
+          </td>
+
+          <td *ngIf="adminTask.instruction_pdf != undefined">
+            <jhi-file-download [fileId]="adminTask.instruction_pdf"> </jhi-file-download>
+          </td>
+
+          <td *ngIf="adminTask.solution_excel != undefined">
+            <jhi-file-download [fileId]="adminTask.solution_excel"> </jhi-file-download>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="button" (click)="deleteAdminTask(adminTask)" class="btn btn-danger btn-sm">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Löschen</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="adminTasks">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="transition()"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
