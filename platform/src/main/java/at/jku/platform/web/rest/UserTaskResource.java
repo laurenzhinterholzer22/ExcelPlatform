@@ -51,7 +51,7 @@ public class UserTaskResource {
         );
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createAlert(applicationName, "userTaskManagement.deleted", userTask.getUser().getId().toString()))
+            .headers(HeaderUtil.createAlert(applicationName, "User Task created", userTask.getUser().getId().toString()))
             .build();
     }
 
@@ -77,6 +77,8 @@ public class UserTaskResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+
 
     @PutMapping("/user_task")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")

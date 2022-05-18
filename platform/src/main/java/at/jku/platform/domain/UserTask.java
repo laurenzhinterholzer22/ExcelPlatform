@@ -2,6 +2,7 @@ package at.jku.platform.domain;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -21,7 +22,7 @@ public class UserTask implements Serializable {
 
     private boolean isCorrect;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "admin_task", referencedColumnName = "admin_task_id")
     private AdminTask adminTask;
 
@@ -60,6 +61,7 @@ public class UserTask implements Serializable {
     public void setAdminTask(AdminTask adminTask) {
         this.adminTask = adminTask;
     }
+
 
     public File getInstruction_user_excel() {
         return instruction_user_excel;

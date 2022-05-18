@@ -6,7 +6,6 @@ import { Pagination } from '../core/request/request.model';
 import { createRequestOption } from '../core/request/request-util';
 import { IUserTask } from './user-task.model';
 import { IUserTaskMeta } from './admin-task-meta.model';
-import { IUser } from '../admin/user-management/user-management.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserTaskService {
@@ -24,7 +23,12 @@ export class UserTaskService {
     return this.http.get<IUserTask>(`${this.resourceUrl}/${id}`);
   }
 
-  query(req?: Pagination): Observable<HttpResponse<IUserTaskMeta[]>> {
+  query(req?: Pagination): Observable<HttpResponse<IUserTask[]>> {
+    const options = createRequestOption(req);
+    return this.http.get<IUserTask[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  queryMeta(req?: Pagination): Observable<HttpResponse<IUserTaskMeta[]>> {
     const options = createRequestOption(req);
     return this.http.get<IUserTaskMeta[]>(this.resourceUrlDTO, { params: options, observe: 'response' });
   }

@@ -3,7 +3,6 @@ package at.jku.platform.service;
 import at.jku.platform.domain.*;
 import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.service.dto.UserTaskDTO;
-import at.jku.platform.web.rest.errors.UserExtraNotExistsException;
 import at.jku.platform.web.rest.errors.UserTaskDoesNotExistException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +50,7 @@ public class UserTaskService {
         userTask.setInstruction_user_excel(instruction_user_excel);
         userTask.setSubmission_excel(submission_excel);
         userTask.setCorrect(isCorrect);
+        userTaskRepository.save(userTask);
         logger.debug("Created new User Task: {}", userTask);
     }
 

@@ -14,6 +14,10 @@ import { RouterModule } from '@angular/router';
         path: 'done-tasks',
         loadChildren: () => import('./done-tasks/done-tasks.module').then(m => m.DoneTasksModule),
       },
+      {
+        path: 'todo-tasks',
+        loadChildren: () => import('./todo-tasks/todo-tasks.module').then(m => m.TodoTasksModule),
+      },
     ]),
   ],
 })

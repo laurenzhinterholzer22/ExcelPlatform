@@ -27,7 +27,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api/admin")
 public class AdminTaskResource {
 
-    private final AdminTaskService adminTaskService;
+    public final AdminTaskService adminTaskService;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -47,7 +47,7 @@ public class AdminTaskResource {
         );
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createAlert(applicationName, "adminTaskManagement.deleted", adminTask.getName()))
+            .headers(HeaderUtil.createAlert(applicationName, "AdminTask created", adminTask.getName()))
             .build();
     }
 
@@ -61,8 +61,7 @@ public class AdminTaskResource {
 
     @GetMapping("/admin_task_meta")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
-    public ResponseEntity<List<AdminTaskDTO>> getAllAdminTasksMeta(@org.springdoc.api.annotations.ParameterObject Pageable pageable)
-        throws AdminTaskDoesNotExistException {
+    public ResponseEntity<List<AdminTaskDTO>> getAllAdminTasksMeta(@org.springdoc.api.annotations.ParameterObject Pageable pageable) throws AdminTaskDoesNotExistException {
         final Page<AdminTaskDTO> page = adminTaskService.getAdminTasksMetaData(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

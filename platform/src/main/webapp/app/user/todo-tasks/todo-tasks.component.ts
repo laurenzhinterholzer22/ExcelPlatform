@@ -1,26 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { Account } from '../../core/auth/account.model';
-import { AdminTask } from '../../admin/admin-task/admin-task.model';
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from '../../config/pagination.constants';
-import { UserTask } from '../user-task.model';
-import { AdminTaskService } from '../../admin/admin-task/service/admin-task.service';
-import { AccountService } from '../../core/auth/account.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserTaskService } from '../user-task.service';
-import { combineLatest } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { UserTaskMeta } from '../admin-task-meta.model';
+import {Component, OnInit} from "@angular/core";
+import {Account} from "../../core/auth/account.model";
+import {AdminTask} from "../../admin/admin-task/admin-task.model";
+import {ASC, DESC, ITEMS_PER_PAGE, SORT} from "../../config/pagination.constants";
+import {AdminTaskService} from "../../admin/admin-task/service/admin-task.service";
+import {AccountService} from "../../core/auth/account.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {HttpHeaders, HttpResponse} from "@angular/common/http";
+import {combineLatest} from "rxjs";
+import {UserTaskMeta} from "../admin-task-meta.model";
+import {UserTaskService} from "../user-task.service";
+import {newArray} from "@angular/compiler/src/util";
+import {date} from "@rxweb/reactive-form-validators";
 
 @Component({
-  selector: 'jhi-done-tasks',
-  templateUrl: './done-tasks.component.html',
+  selector: 'jhi-todo-tasks',
+  templateUrl: './todo-tasks.component.html',
 })
-export class DoneTasksComponent implements OnInit {
+export class TodoTasksComponent implements OnInit {
   currentAccount: Account | null = null;
-  adminTasks: AdminTask[] | null = null;
-  userTasks: UserTask[] | null = null;
+  adminTasks!: AdminTask[] | null;
   userTasksMeta: UserTaskMeta[] | null = null;
+  adminTasksFiltered: AdminTask[] | undefined = undefined;
   isLoading = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -44,6 +45,19 @@ export class DoneTasksComponent implements OnInit {
 
   loadAll(): void {
     this.isLoading = true;
+    this.adminTaskService
+      .query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe({
+        next: (res: HttpResponse<AdminTask[]>) => {
+          this.isLoading = false;
+          this.onSuccessAdmin(res.body, res.headers);
+        },
+        error: () => (this.isLoading = false),
+      });
     this.userTaskService
       .queryMeta({
         page: this.page - 1,
@@ -53,20 +67,7 @@ export class DoneTasksComponent implements OnInit {
       .subscribe({
         next: (res: HttpResponse<UserTaskMeta[]>) => {
           this.isLoading = false;
-          this.onSuccessMeta(res.body, res.headers);
-        },
-        error: () => (this.isLoading = false),
-      });
-    this.userTaskService
-      .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe({
-        next: (res: HttpResponse<UserTaskMeta[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers);
+          this.onSuccessUser(res.body, res.headers);
         },
         error: () => (this.isLoading = false),
       });
@@ -81,6 +82,8 @@ export class DoneTasksComponent implements OnInit {
       },
     });
   }
+
+
 
   private handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
@@ -101,13 +104,22 @@ export class DoneTasksComponent implements OnInit {
     return result;
   }
 
-  private onSuccessMeta(userTasksMeta: UserTaskMeta[] | null, headers: HttpHeaders): void {
+  private onSuccessAdmin(adminTasks: AdminTask[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
-    this.userTasksMeta = userTasksMeta;
+    this.adminTasks = adminTasks;
   }
 
-  private onSuccess(userTasks: UserTask[] | null, headers: HttpHeaders): void {
-    this.totalItems = Number(headers.get('X-Total-Count'));
-    this.userTasks = userTasks;
+  private onSuccessUser(userTasksMeta: UserTaskMeta[] | null, headers: HttpHeaders): void {
+    this.userTasksMeta = userTasksMeta;
+    const cId = this.currentAccount?.id;
+    const userTasksAdminIds = userTasksMeta?.filter(function (data) {
+      return data.user_id === cId;
+    }).map(function (data) {
+      return data.admin_task_id;
+    });
+    this.adminTasksFiltered = this.adminTasks?.filter(function (data) {
+      return !userTasksAdminIds?.includes(data.id)
+    });
   }
+
 }

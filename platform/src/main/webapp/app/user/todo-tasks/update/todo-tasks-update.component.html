@@ -1,17 +1,16 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myAdminTaskLabel">Beispiel bearbeiten</h2>
+      <h2 id="myAdminTaskLabel">Beispiel lösen</h2>
 
       <div *ngIf="userTask">
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="userTaskMeta.admin_task_name">
+        <div class="form-group" [hidden]="!userTask.adminTask">
           <label>Beispielname</label>
           <input type="text" class="form-control" name="id" formControlName="id" readonly />
         </div>
 
-        <label>{{userTask.adminTask}}</label>
 
 
         <div class="form-group">
@@ -19,13 +18,20 @@
           <jhi-file-upload
             [disabled]="false"
             id="fileUploadSubmissionExcel"
-            [fileId]="submissionExcel"
+            [fileId]="uploadFileIdSubmissionExcel"
             (fileAdded)="handleFileAddedSubmissionExcel($event)"
             (fileRemoved)="handleFileRemovedSubmissionExcel($event)"
             (fileModified)="handleFileMovedSubmissionExcel($event[0], $event[1])"
           >
           </jhi-file-upload>
         </div>
+
+        <small
+          class="form-text text-danger"
+          *ngIf="uploadFileIdSubmissionExcel == -1"
+        >
+          Bitte Laden Sie ein File hoch
+        </small>
       </div>
 
       <div *ngIf="userTask">
@@ -33,7 +39,15 @@
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
-        <button type="submit" [disabled]="editForm.invalid || isSaving || submissionExcel == -1" class="btn btn-primary">
+        <button
+          type="submit"
+          [disabled]="
+            editForm.invalid ||
+            isSaving ||
+            uploadFileIdSubmissionExcel == -1
+          "
+          class="btn btn-primary"
+        >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>

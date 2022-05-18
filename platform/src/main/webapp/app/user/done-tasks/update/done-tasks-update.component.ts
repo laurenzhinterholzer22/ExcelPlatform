@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { UserTask } from '../../user-task.model';
+import {IUserTask, UserTask} from '../../user-task.model';
 import { UserTaskService } from '../../user-task.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { User } from '../../../admin/user-management/user-management.model';
 import { numeric } from '@rxweb/reactive-form-validators';
 import { UserTaskMeta } from '../../admin-task-meta.model';
+import {AdminTask} from "../../../admin/admin-task/admin-task.model";
+import {AdminTaskService} from "../../../admin/admin-task/service/admin-task.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'jhi-done-tasks-update',
@@ -14,6 +17,7 @@ import { UserTaskMeta } from '../../admin-task-meta.model';
 export class DoneTasksUpdateComponent implements OnInit {
   userTask!: UserTask;
   userTaskMeta!: UserTaskMeta;
+  adminTask!: AdminTask;
   isSaving = false;
   authorities: string[] = [];
   submissionExcel = -1;
@@ -22,12 +26,12 @@ export class DoneTasksUpdateComponent implements OnInit {
     id: [],
   });
 
-  constructor(private userTaskService: UserTaskService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(private userTaskService: UserTaskService, private route: ActivatedRoute, private fb: FormBuilder,private adminTaskService: AdminTaskService ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(({ userTaskMeta }) => {
       if (userTaskMeta) {
-        this.userTaskMeta = userTaskMeta;
+        this.userTask = userTaskMeta;
       }
     });
   }

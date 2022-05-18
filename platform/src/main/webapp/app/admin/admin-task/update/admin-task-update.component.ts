@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AdminTaskService } from '../service/admin-task.service';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {UserTask} from "../../../user/user-task.model";
 
 @Component({
   selector: 'jhi-admin-task-update',
@@ -13,7 +14,6 @@ export class AdminTaskUpdateComponent implements OnInit {
   public adminTask!: AdminTask;
   public isSaving = false;
   public files: File[] | null = null;
-  // public uploadFileId = -1;
   public uploadFileIdInstructionExcel = -1;
   public uploadFileIdInstructionPdf = -1;
   public uploadFileIdSolutionExcel = -1;
@@ -56,9 +56,6 @@ export class AdminTaskUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: adminTask.id,
       name: adminTask.name,
-      // instruction_excel: adminTask.instruction_excel,
-      // instruction_pdf: adminTask.instruction_pdf,
-      // solution_excel: adminTask.solution_excel,
     });
   }
 
@@ -67,8 +64,6 @@ export class AdminTaskUpdateComponent implements OnInit {
     adminTask.instruction_excel = this.uploadFileIdInstructionExcel;
     adminTask.instruction_pdf = this.uploadFileIdInstructionPdf;
     adminTask.solution_excel = this.uploadFileIdSolutionExcel;
-    // adminTask.instruction_pdf = this.editForm.get(['instruction_pdf'])!.value;
-    // adminTask.solution_excel = this.editForm.get(['solution_excel'])!.value;
   }
 
   public onSaveSuccess(): void {
@@ -80,20 +75,6 @@ export class AdminTaskUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  // public handleFileAdded(fileId: number): void {
-  //   this.uploadFileId = fileId;
-  // }
-  //
-  //
-  // public handleFileRemoved(fileId: number): void {
-  //   this.uploadFileId = -1;
-  // }
-  //
-  //
-  //
-  // public handleFileMoved(oldFileId: number, newFileId: number): void {
-  //   this.uploadFileId = newFileId;
-  // }
 
   public handleFileAddedInstructionExcel(fileId: number): void {
     this.uploadFileIdInstructionExcel = fileId;
