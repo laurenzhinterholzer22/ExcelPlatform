@@ -11,18 +11,18 @@ import {Observable, of} from "rxjs";
 import {IUserTask, UserTask} from "../user-task.model";
 import {UserTaskService} from "../user-task.service";
 
-@Injectable({ providedIn: 'root' })
-export class UserTaskResolve implements Resolve<IUserTask> {
-  constructor(private service: UserTaskService) {}
-
-  resolve(route: ActivatedRouteSnapshot): Observable<IUserTask> {
-    const id = route.params['id'];
-    if (id) {
-      return this.service.find(id);
-    }
-    return of(new UserTask());
-  }
-}
+// @Injectable({ providedIn: 'root' })
+// export class UserTaskResolve implements Resolve<IAdminTask> {
+//   constructor(private service: UserTaskService) {}
+//
+//   resolve(route: ActivatedRouteSnapshot): Observable<IAdminTask> {
+//     const id = route.params['id'];
+//     if (id) {
+//       return this.service.find(id);
+//     }
+//     return of(new AdminTask());
+//   }
+// }
 
 export const todoTasksRoute: Routes = [
   {
@@ -35,8 +35,8 @@ export const todoTasksRoute: Routes = [
   {
     path: ':id/new',
     component: TodoTasksUpdateComponent,
-    resolve: {
-      userTask: UserTaskResolve,
-    },
+    // resolve: {
+    //   userTask: UserTaskResolve,
+    // },
   },
 ];

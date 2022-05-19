@@ -43,7 +43,7 @@ public class UserTaskService {
     }
 
     @Transactional
-    public void addUserTask(User user, AdminTask adminTask, File instruction_user_excel, File submission_excel, boolean isCorrect) {
+    public UserTask addUserTask(User user, AdminTask adminTask, File instruction_user_excel, File submission_excel, boolean isCorrect) {
         UserTask userTask = new UserTask();
         userTask.setUser(user);
         userTask.setAdminTask(adminTask);
@@ -52,6 +52,7 @@ public class UserTaskService {
         userTask.setCorrect(isCorrect);
         userTaskRepository.save(userTask);
         logger.debug("Created new User Task: {}", userTask);
+        return userTask;
     }
 
     @Transactional
@@ -63,8 +64,9 @@ public class UserTaskService {
         File submission_excel,
         User user
     ) {
-        UserTask userTask = userTaskRepository.getById(id);
         userTaskRepository.deleteById(id);
+        UserTask userTask = new UserTask();
+        userTask.setId(id);
         userTask.setCorrect(isCorrect);
         userTask.setAdminTask(adminTask);
         userTask.setInstruction_user_excel(instruction_user_excel);

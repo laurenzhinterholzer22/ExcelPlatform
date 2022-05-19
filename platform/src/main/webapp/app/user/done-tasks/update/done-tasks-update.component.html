@@ -5,13 +5,10 @@
 
       <div *ngIf="userTask">
         <jhi-alert-error></jhi-alert-error>
-
-        <div class="form-group" [hidden]="userTaskMeta.admin_task_name">
-          <label>Beispielname</label>
-          <input type="text" class="form-control" name="id" formControlName="id" readonly />
+        <div class="form-group" [align]="!adminTask?.id">
+          <label>Beispiel-Name:</label>
+          <input type="text" class="form-control" name="adminTask.name" formControlName="adminTask.name" value="{{adminTask?.name}}" readonly />
         </div>
-
-        <label>{{userTask.adminTask}}</label>
 
 
         <div class="form-group">
@@ -26,7 +23,22 @@
           >
           </jhi-file-upload>
         </div>
+
+        <small
+          class="form-text text-danger"
+          *ngIf="submissionExcel == -1"
+        >
+          Bitte Laden Sie ein File hoch
+        </small>
+
+        <small
+          class="form-text text-danger"
+          *ngIf="submissionExcel == -2"
+        >
+          Bitte Laden Sie das richtige Dateiformat hoch (.xlsx für Biepsiele und .pdf für Angaben)
+        </small>
       </div>
+
 
       <div *ngIf="userTask">
         <button type="button" class="btn btn-secondary" (click)="previousState()">

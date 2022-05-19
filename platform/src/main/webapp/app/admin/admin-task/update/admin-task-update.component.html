@@ -67,6 +67,12 @@
         >
           Bitte Laden Sie alle 3 Files hoch
         </small>
+        <small
+          class="form-text text-danger"
+          *ngIf="uploadFileIdInstructionExcel == -2 || uploadFileIdInstructionPdf == -2 || uploadFileIdSolutionExcel == -2"
+        >
+          Bitte Laden Sie das richtige Dateiformat hoch (.xlsx für Biepsiele und .pdf für Angaben)
+        </small>
       </div>
 
       <div *ngIf="adminTask">
@@ -79,9 +85,9 @@
           [disabled]="
             editForm.invalid ||
             isSaving ||
-            uploadFileIdInstructionExcel == -1 ||
-            uploadFileIdInstructionPdf == -1 ||
-            uploadFileIdSolutionExcel == -1
+            uploadFileIdInstructionExcel < -1 ||
+            uploadFileIdInstructionPdf < -1 ||
+            uploadFileIdSolutionExcel < -1
           "
           class="btn btn-primary"
         >

@@ -29,7 +29,6 @@
       </thead>
       <tbody *ngIf="userTasksMeta">
         <tr *ngFor="let userTaskMeta of userTasksMeta">
-<!--          <ng-container *ngFor="let userTask of userTasks">-->
           <ng-container *ngIf="userTaskMeta?.user_id == currentAccount?.id">
             <td>{{ userTaskMeta.id }}</td>
             <td>{{ userTaskMeta.admin_task_name }}</td>
@@ -46,21 +45,19 @@
             </td>
             <td>{{ userTaskMeta.is_correct }}</td>
 
+
+
+
             <ng-container *ngFor="let userTask of userTasks">
               <ng-container *ngIf="userTask.id == userTaskMeta.id">
-                <button type="submit" [routerLink]="['./', userTask.id, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                <button type="submit" [routerLink]="['./', userTask.id, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm" [queryParams]="{id: userTask.id, adminTaskId: userTask.adminTask?.id, adminTaskName: userTask.adminTask?.name, adminTaskInstructionExcel: userTaskMeta?.instruction_excel, adminTaskInstructionPdf: userTaskMeta?.instruction_pdf, adminTaskSolutionExcel: userTaskMeta?.solution_excel}">
                   <fa-icon icon="pencil-alt"></fa-icon>
                   <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                 </button>
               </ng-container>
             </ng-container>
 
-<!--            <button type="submit" [routerLink]="['./', userTaskMeta.id, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">-->
-<!--              <fa-icon icon="pencil-alt"></fa-icon>-->
-<!--              <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>-->
-<!--            </button>-->
           </ng-container>
-<!--          </ng-container>-->
         </tr>
       </tbody>
     </table>

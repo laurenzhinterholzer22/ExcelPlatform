@@ -1,11 +1,15 @@
 package at.jku.platform.web.rest;
 
+import at.jku.platform.domain.User;
 import at.jku.platform.domain.UserTask;
 import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.security.AuthoritiesConstants;
 import at.jku.platform.service.UserTaskService;
 import at.jku.platform.service.dto.UserTaskDTO;
 import at.jku.platform.web.rest.errors.UserTaskDoesNotExistException;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import javax.swing.text.html.Option;
@@ -41,8 +45,8 @@ public class UserTaskResource {
 
     @PostMapping("/user_task")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
-    public ResponseEntity<UserTask> createUserTask(@Valid @RequestBody UserTask userTask) {
-        userTaskService.addUserTask(
+    public ResponseEntity<UserTask> createUserTask(@Valid @RequestBody UserTask userTask) throws URISyntaxException {
+         UserTask newUserTask = userTaskService.addUserTask(
             userTask.getUser(),
             userTask.getAdminTask(),
             userTask.getInstruction_user_excel(),
@@ -50,9 +54,10 @@ public class UserTaskResource {
             userTask.isCorrect()
         );
         return ResponseEntity
-            .noContent()
+            .created(new URI(""))
             .headers(HeaderUtil.createAlert(applicationName, "User Task created", userTask.getUser().getId().toString()))
-            .build();
+            .body(newUserTask);
+        
     }
 
     @GetMapping("/user_task")

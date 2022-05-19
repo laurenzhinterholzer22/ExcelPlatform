@@ -26,8 +26,6 @@ export class FileUploadComponent {
   @Input()
   public disabled = false;
 
-  public testing = 'asdf';
-
   private _fileId = -1;
   private _originalId = -1;
   private _fileRemoved = false;

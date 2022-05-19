@@ -5,6 +5,7 @@ import { AdminTaskService } from '../service/admin-task.service';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {UserTask} from "../../../user/user-task.model";
+import {FileUploadService} from "../../../shared/file/file-upload/file-upload.service";
 
 @Component({
   selector: 'jhi-admin-task-update',
@@ -26,7 +27,8 @@ export class AdminTaskUpdateComponent implements OnInit {
   constructor(
     private adminTaskService: AdminTaskService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private fileService: FileUploadService
   ) // private activeModal: NgbActiveModal
   {}
 
@@ -77,7 +79,15 @@ export class AdminTaskUpdateComponent implements OnInit {
 
 
   public handleFileAddedInstructionExcel(fileId: number): void {
-    this.uploadFileIdInstructionExcel = fileId;
+    // let contentType;
+    this.fileService.getFileMetaData(fileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.uploadFileIdInstructionExcel = fileId;
+      }
+      else {
+        this.uploadFileIdInstructionExcel = -2;
+      }
+    });
   }
 
   public handleFileRemovedInstructionExcel(fileId: number): void {
@@ -85,11 +95,27 @@ export class AdminTaskUpdateComponent implements OnInit {
   }
 
   public handleFileMovedInstructionExcel(oldFileId: number, newFileId: number): void {
-    this.uploadFileIdInstructionExcel = newFileId;
+    this.fileService.getFileMetaData(newFileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.uploadFileIdInstructionExcel = newFileId;
+      }
+      else {
+        this.uploadFileIdInstructionExcel = -2;
+      }
+    });
   }
 
+  // application/pdf
+
   public handleFileAddedInstructionPdf(fileId: number): void {
-    this.uploadFileIdInstructionPdf = fileId;
+    this.fileService.getFileMetaData(fileId).subscribe((data) => {
+      if (data.contentType === "application/pdf") {
+        this.uploadFileIdInstructionPdf = fileId;
+      }
+      else {
+        this.uploadFileIdInstructionPdf = -2;
+      }
+    });
   }
 
   public handleFileRemovedInstructionPdf(fileId: number): void {
@@ -97,18 +123,40 @@ export class AdminTaskUpdateComponent implements OnInit {
   }
 
   public handleFileMovedInstructionPdf(oldFileId: number, newFileId: number): void {
-    this.uploadFileIdInstructionPdf = newFileId;
+    this.fileService.getFileMetaData(newFileId).subscribe((data) => {
+      if (data.contentType === "application/pdf") {
+        this.uploadFileIdInstructionPdf = newFileId;
+      }
+      else {
+        this.uploadFileIdInstructionPdf = -2;
+      }
+    });
   }
 
   public handleFileAddedSolutionExcel(fileId: number): void {
-    this.uploadFileIdSolutionExcel = fileId;
+    this.fileService.getFileMetaData(fileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.uploadFileIdSolutionExcel = fileId;
+      }
+      else {
+        this.uploadFileIdSolutionExcel = -2;
+      }
+    });
   }
+
 
   public handleFileRemovedSolutionExcel(fileId: number): void {
     this.uploadFileIdSolutionExcel = -1;
   }
 
   public handleFileMovedSolutionExcel(oldFileId: number, newFileId: number): void {
-    this.uploadFileIdSolutionExcel = newFileId;
+    this.fileService.getFileMetaData(newFileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.uploadFileIdSolutionExcel = newFileId;
+      }
+      else {
+        this.uploadFileIdSolutionExcel = -2;
+      }
+    });
   }
 }

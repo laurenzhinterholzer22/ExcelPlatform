@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
-import { IAdminTask } from '../admin-task.model';
+import {AdminTask, IAdminTask} from '../admin-task.model';
 import { Observable } from 'rxjs';
 import { Pagination } from '../../../core/request/request.model';
 import { createRequestOption } from '../../../core/request/request-util';
@@ -21,6 +21,7 @@ export class AdminTaskService {
   find(id: number): Observable<IAdminTask> {
     return this.http.get<IAdminTask>(`${this.resourceUrl}/${id}`);
   }
+
 
   query(req?: Pagination): Observable<HttpResponse<IAdminTask[]>> {
     const options = createRequestOption(req);

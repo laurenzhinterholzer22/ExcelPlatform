@@ -10,7 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserTaskService } from '../user-task.service';
 import { combineLatest } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { UserTaskMeta } from '../admin-task-meta.model';
+import { UserTaskMeta } from '../user-task-meta.model';
 
 @Component({
   selector: 'jhi-done-tasks',
@@ -64,7 +64,7 @@ export class DoneTasksComponent implements OnInit {
         sort: this.sort(),
       })
       .subscribe({
-        next: (res: HttpResponse<UserTaskMeta[]>) => {
+        next: (res: HttpResponse<UserTask[]>) => {
           this.isLoading = false;
           this.onSuccess(res.body, res.headers);
         },

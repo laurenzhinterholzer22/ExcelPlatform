@@ -3,12 +3,12 @@
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="myAdminTaskLabel">Beispiel lösen</h2>
 
-      <div *ngIf="userTask">
+      <div *ngIf="adminTask">
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="!userTask.adminTask">
+        <div class="form-group" [hidden]="!adminTask.id">
           <label>Beispielname</label>
-          <input type="text" class="form-control" name="id" formControlName="id" readonly />
+          <input type="text" class="form-control" name="name" value="{{adminTask?.name}}" readonly />
         </div>
 
 
@@ -32,9 +32,15 @@
         >
           Bitte Laden Sie ein File hoch
         </small>
+        <small
+          class="form-text text-danger"
+          *ngIf="uploadFileIdSubmissionExcel == -2"
+        >
+          Bitte Laden Sie das richtige Dateiformat hoch (.xlsx für Biepsiele und .pdf für Angaben)
+        </small>
       </div>
 
-      <div *ngIf="userTask">
+      <div *ngIf="adminTask">
         <button type="button" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>

@@ -1,15 +1,25 @@
 package at.jku.platform.service;
 
 import at.jku.platform.domain.File;
+import at.jku.platform.domain.UserTask;
 import at.jku.platform.repository.FileRepository;
+import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.service.dto.FileDTO;
 import at.jku.platform.web.rest.errors.FileNotExistsException;
 import at.jku.platform.web.rest.errors.UserExtraNotExistsException;
+import at.jku.platform.correction.CompareExcelFiles;
+import at.jku.platform.correction.FillColorHex;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import javax.swing.text.html.Option;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -21,9 +31,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileService {
 
     private final FileRepository fileRepository;
+    private final UserTaskRepository userTaskRepository;
 
-    public FileService(FileRepository fileRepository) {
+    public FileService(FileRepository fileRepository, UserTaskRepository userTaskRepository) {
         this.fileRepository = fileRepository;
+        this.userTaskRepository = userTaskRepository;
     }
 
     @Transactional
@@ -60,5 +72,29 @@ public class FileService {
         } catch (FileNotExistsException e) {
             return Optional.empty();
         }
+    }
+
+
+    public Optional<String> correctFile(long id) {
+        UserTask userTask = userTaskRepository.getById(id);
+        File submission = userTask.getSubmission_excel();
+        File solution = userTask.getAdminTask().getSolution_excel();
+        try  {
+            InputStream stream_solution = new ByteArrayInputStream(solution.getContent());
+            InputStream stream_submission = new ByteArrayInputStream(submission.getContent());
+            XSSFWorkbook workbook_solution = new XSSFWorkbook(stream_solution);
+            XSSFWorkbook workbook_submission = new XSSFWorkbook(stream_submission);
+
+            if (CompareExcelFiles.correctSolution(workbook_solution,workbook_submission)) {
+                return Optional.of("Berechnung korrekt");
+            }
+            else {
+                return Optional.of(CompareExcelFiles.checkZwischenergebnis(workbook_solution, workbook_submission));
+            }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
     }
 }

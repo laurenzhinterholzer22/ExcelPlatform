@@ -14,6 +14,7 @@ export class FileUploadService {
     const formData = new FormData();
     formData.append('file', new Blob([file], { type: file.type }));
     formData.append('fileName', file.name);
+    // console.log(file.type);
 
     return this.http.post<number>(`${SERVER_API_URL}api/files`, formData);
   }
@@ -50,4 +51,6 @@ export class FileUploadService {
       })
     );
   }
+
+
 }

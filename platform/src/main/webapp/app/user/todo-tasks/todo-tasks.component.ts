@@ -8,7 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {HttpHeaders, HttpResponse} from "@angular/common/http";
 import {combineLatest} from "rxjs";
-import {UserTaskMeta} from "../admin-task-meta.model";
+import {UserTaskMeta} from "../user-task-meta.model";
 import {UserTaskService} from "../user-task.service";
 import {newArray} from "@angular/compiler/src/util";
 import {date} from "@rxweb/reactive-form-validators";

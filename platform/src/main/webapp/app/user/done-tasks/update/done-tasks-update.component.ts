@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import {IUserTask, UserTask} from '../../user-task.model';
 import { UserTaskService } from '../../user-task.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router, RoutesRecognized} from '@angular/router';
 import { FormBuilder } from '@angular/forms';
-import { User } from '../../../admin/user-management/user-management.model';
 import { numeric } from '@rxweb/reactive-form-validators';
-import { UserTaskMeta } from '../../admin-task-meta.model';
+import { UserTaskMeta } from '../../user-task-meta.model';
 import {AdminTask} from "../../../admin/admin-task/admin-task.model";
 import {AdminTaskService} from "../../../admin/admin-task/service/admin-task.service";
 import {Observable} from "rxjs";
+import {Account} from "../../../core/auth/account.model";
+import {AccountService} from "../../../core/auth/account.service";
+import {User} from "../../../entities/user/user.model";
+import {FileUploadService} from "../../../shared/file/file-upload/file-upload.service";
 
 @Component({
   selector: 'jhi-done-tasks-update',
@@ -21,19 +24,21 @@ export class DoneTasksUpdateComponent implements OnInit {
   isSaving = false;
   authorities: string[] = [];
   submissionExcel = -1;
+  currentAccount: Account | null = null;
 
   editForm = this.fb.group({
     id: [],
   });
 
-  constructor(private userTaskService: UserTaskService, private route: ActivatedRoute, private fb: FormBuilder,private adminTaskService: AdminTaskService ) {}
+  constructor(private userTaskService: UserTaskService, private route: ActivatedRoute, private fb: FormBuilder,private adminTaskService: AdminTaskService, private accountService: AccountService, private fileService: FileUploadService ) {}
 
   ngOnInit(): void {
-    this.route.data.subscribe(({ userTaskMeta }) => {
-      if (userTaskMeta) {
-        this.userTask = userTaskMeta;
-      }
-    });
+    this.accountService.identity().subscribe(account => (this.currentAccount = account));
+    this.route.queryParams.subscribe(params => {
+    this.userTask = new UserTask(params.id,false);
+    this.adminTask = new AdminTask(params.adminTaskId, params.adminTaskName, params.adminTaskInstructionExcel,params.adminTaskInstructionPdf,params.adminTaskSolutionExcel);
+      console.log(this.adminTask);
+  });
   }
 
   previousState(): void {
@@ -50,7 +55,14 @@ export class DoneTasksUpdateComponent implements OnInit {
   }
 
   public handleFileAddedSubmissionExcel(fileId: number): void {
-    this.submissionExcel = fileId;
+    this.fileService.getFileMetaData(fileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.submissionExcel = fileId;
+      }
+      else {
+        this.submissionExcel = -2;
+      }
+    });
   }
 
   public handleFileRemovedSubmissionExcel(fileId: number): void {
@@ -58,11 +70,23 @@ export class DoneTasksUpdateComponent implements OnInit {
   }
 
   public handleFileMovedSubmissionExcel(oldFileId: number, newFileId: number): void {
-    this.submissionExcel = newFileId;
+    this.fileService.getFileMetaData(newFileId).subscribe((data) => {
+      if (data.contentType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+        this.submissionExcel = newFileId;
+      }
+      else {
+        this.submissionExcel = -2;
+      }
+    });
   }
 
   private updateUserTask(userTask: UserTask): void {
     userTask.submission_excel = this.submissionExcel;
+    userTask.adminTask = this.adminTask;
+    userTask.isCorrect = false;
+    userTask.id = this.userTask.id;
+    userTask.user = new User(this.currentAccount!.id, this.currentAccount!.login);
+    userTask.instruction_user_excel = this.userTask.instruction_user_excel;
   }
 
   private onSaveSuccess(): void {

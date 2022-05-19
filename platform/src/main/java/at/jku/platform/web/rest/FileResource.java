@@ -1,9 +1,7 @@
 package at.jku.platform.web.rest;
 
 import at.jku.platform.domain.File;
-import at.jku.platform.domain.User;
 import at.jku.platform.security.AuthoritiesConstants;
-import at.jku.platform.security.SecurityUtils;
 import at.jku.platform.service.FileService;
 import at.jku.platform.service.UserService;
 import at.jku.platform.service.dto.FileDTO;
@@ -12,6 +10,8 @@ import at.jku.platform.web.rest.errors.FileNotExistsException;
 import at.jku.platform.web.rest.errors.FileStorageException;
 import at.jku.platform.web.rest.errors.UserExtraNotExistsException;
 import java.io.IOException;
+import java.util.Optional;
+
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -97,6 +97,8 @@ public class FileResource {
         return ResponseEntity.of(fileService.getFileMetaData(id));
     }
 
+
+
     /**
      * REST endpoint for removing files.
      *
@@ -109,4 +111,17 @@ public class FileResource {
         fileService.removeFile(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("file_correction/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<String> correctFile(@PathVariable long id) {
+        return ResponseEntity.of(fileService.correctFile(id));
+    }
+
+//    @GetMapping("file_correction/{id}")
+//    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
+//    public Optional<String> correctFile(@PathVariable long id) {
+//        return fileService.correctFile(id);
+//    }
+
 }
