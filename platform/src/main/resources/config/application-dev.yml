@@ -44,10 +44,16 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: laurenz.georg@gmail.com
+    password: Georg221099
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -61,6 +67,8 @@ spring:
     locator:
       discovery:
         enabled: true
+
+
 
 server:
   port: 8080
@@ -112,3 +120,4 @@ jhipster:
 # ===================================================================
 
 # application:
+
