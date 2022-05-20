@@ -47,7 +47,6 @@
 
 
 
-
             <ng-container *ngFor="let userTask of userTasks">
               <ng-container *ngIf="userTask.id == userTaskMeta.id">
                 <button type="submit" [routerLink]="['./', userTask.id, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm" [queryParams]="{id: userTask.id, adminTaskId: userTask.adminTask?.id, adminTaskName: userTask.adminTask?.name, adminTaskInstructionExcel: userTaskMeta?.instruction_excel, adminTaskInstructionPdf: userTaskMeta?.instruction_pdf, adminTaskSolutionExcel: userTaskMeta?.solution_excel}">
@@ -55,6 +54,15 @@
                   <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                 </button>
               </ng-container>
+            </ng-container>
+
+            <ng-container *ngFor="let userTask of userTasks">
+              <ng-container *ngIf="userTask.id == userTaskMeta.id && !userTaskMeta.is_correct">
+              <td></td>
+              <button type="submit" style="background-color: green" [routerLink]="['./', userTaskMeta.id, 'feedback']" queryParamsHandling="merge" class="btn btn-primary btn-sm" [queryParams]="{feedback:userTasksFeedbackMap.get(userTask.id)}">
+                <span class="d-none d-md-inline" >Feedback</span>
+              </button>
+            </ng-container>
             </ng-container>
 
           </ng-container>

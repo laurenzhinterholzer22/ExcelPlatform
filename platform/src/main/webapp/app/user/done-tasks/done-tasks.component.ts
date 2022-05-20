@@ -27,6 +27,7 @@ export class DoneTasksComponent implements OnInit {
   page!: number;
   predicate!: string;
   ascending!: boolean;
+  userTasksFeedbackMap = new Map();
 
   constructor(
     private adminTaskService: AdminTaskService,
@@ -109,5 +110,12 @@ export class DoneTasksComponent implements OnInit {
   private onSuccess(userTasks: UserTask[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.userTasks = userTasks;
+    if (this.userTasks !== null) {
+      for (const userTask of this.userTasks) {
+        if (userTask.id !== undefined) {
+          this.userTaskService.getCorrectUserTaskWithoutHeaders(userTask.id).subscribe(data => this.userTasksFeedbackMap.set(userTask.id, data));
+        }
+      }
+    }
   }
 }

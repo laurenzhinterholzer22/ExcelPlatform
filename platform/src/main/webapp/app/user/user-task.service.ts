@@ -15,8 +15,8 @@ export class UserTaskService {
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/user_task');
   private resourceUrlSetCorrect = this.applicationConfigService.getEndpointFor('api/user_task/set_correct');
   private resourceUrlCorrect = this.applicationConfigService.getEndpointFor('api/files/file_correction');
+  private resourceUrlCorrectWithoutHeaders = this.applicationConfigService.getEndpointFor('api/files/file_correction/without_headers');
   private resourceUrlSolvedExercises = this.applicationConfigService.getEndpointFor('api/user_task/solved_exercises');
-  private test !: Observable<number>;
 
 
 
@@ -42,6 +42,10 @@ export class UserTaskService {
 
   public getCorrectUserTask(id: number): Observable<string> {
      return this.http.get<string>(`${this.resourceUrlCorrect}/${id}`,{ responseType: 'text' as 'json' });
+  }
+
+  public getCorrectUserTaskWithoutHeaders(id: number): Observable<string> {
+    return this.http.get<string>(`${this.resourceUrlCorrectWithoutHeaders}/${id}`,{ responseType: 'text' as 'json' });
   }
 
   update(userTask: IUserTask): Observable<IUserTask> {

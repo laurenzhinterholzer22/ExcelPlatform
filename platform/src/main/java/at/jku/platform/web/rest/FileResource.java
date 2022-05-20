@@ -130,6 +130,14 @@ public class FileResource {
             .body(fileService.correctFile(id));
     }
 
+    @GetMapping("file_correction/without_headers/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<String> correctFileWithoutHeaders(@PathVariable long id) {
+        return ResponseEntity
+            .ok()
+            .body(fileService.correctFile(id));
+    }
+
 
 
 }

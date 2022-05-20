@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { IUserTask, UserTask } from '../user-task.model';
 import { UserTaskService } from '../user-task.service';
 import { Observable, of } from 'rxjs';
+import {DoneTaskFeedbackComponent} from "./feedback/done-task-feedback.component";
 
 @Injectable({ providedIn: 'root' })
 export class DoneUserTaskResolve implements Resolve<IUserTask> {
@@ -34,4 +35,9 @@ export const doneTasksRoute: Routes = [
       userTaskMeta: DoneUserTaskResolve,
     },
   },
+  {
+    path: ':id/feedback',
+    component: DoneTaskFeedbackComponent,
+  },
+
 ];

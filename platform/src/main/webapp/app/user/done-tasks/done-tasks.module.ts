@@ -8,9 +8,10 @@ import { AllTasksComponent } from '../all-tasks/all-tasks.component';
 import { doneTasksRoute } from './done-tasks.route';
 import { DoneTasksComponent } from './done-tasks.component';
 import { DoneTasksUpdateComponent } from './update/done-tasks-update.component';
+import {DoneTaskFeedbackComponent} from "./feedback/done-task-feedback.component";
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild(doneTasksRoute), NgbModule],
-  declarations: [DoneTasksComponent, DoneTasksUpdateComponent],
+  declarations: [DoneTasksComponent, DoneTasksUpdateComponent, DoneTaskFeedbackComponent],
 })
 export class DoneTasksModule {}
