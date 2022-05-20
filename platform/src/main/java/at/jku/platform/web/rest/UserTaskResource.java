@@ -110,11 +110,13 @@ public class UserTaskResource {
         return ResponseUtil.wrapOrNotFound(updatedUserTask);
     }
 
-//    @GetMapping("/user_task/solved_exercises/{id}")
-//    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
-//    public ResponseEntity<Integer> getSolvedExercises(@PathVariable long id) {
-//        return ResponseUtil.wrapOrNotFound(userTaskService.getSolvedExercises(id));
-//    }
+    @GetMapping("/user_task/solved_exercises/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
+    public ResponseEntity<Integer> getSolvedExercises(@PathVariable long id) {
+        return ResponseEntity
+            .ok()
+            .body(userTaskService.getSolvedExercises(id));
+    }
 
 
 

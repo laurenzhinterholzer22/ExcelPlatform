@@ -120,13 +120,8 @@ public class FileResource {
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping("file_correction/{id}")
-//    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
-//    public ResponseEntity<String> correctFile(@PathVariable long id) {
-//        return ResponseEntity
-//            .of(fileService.correctFile(id));
-//    }
-        @GetMapping("file_correction/{id}")
+
+    @GetMapping("file_correction/{id}")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<String> correctFile(@PathVariable long id) {
         return ResponseEntity

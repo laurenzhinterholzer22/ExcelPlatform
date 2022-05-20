@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
@@ -14,6 +14,7 @@ import { UserManagementDeleteDialogComponent } from '../delete/user-management-d
 import { User_extraManagementService } from '../service/user_extra-management.service';
 import {UserTask} from "../../../user/user-task.model";
 import {UserTaskService} from "../../../user/user-task.service";
+import {date} from "@rxweb/reactive-form-validators";
 
 @Component({
   selector: 'jhi-user-mgmt',
@@ -30,6 +31,10 @@ export class UserManagementComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   userTasks: UserTask [] | null = null;
+  solvedExercises: number [] = [];
+  solvedExercisesMap = new Map();
+  solved !: number;
+  counter =  -1;
 
   constructor(
     private userService: UserManagementService,
@@ -131,6 +136,13 @@ export class UserManagementComponent implements OnInit {
   private onSuccess(users: User[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.users = users;
+    if (this.users !== null) {
+      for (const user of this.users) {
+        if (user.id !== undefined) {
+          this.userTaskService.getCorrectExercises(user.id).subscribe(data =>this.solvedExercisesMap.set(user.id, data));
+        }
+      }
+      }
   }
 
   private onSuccessUserExtra(userExtras: UserExtra[] | null, headers: HttpHeaders): void {

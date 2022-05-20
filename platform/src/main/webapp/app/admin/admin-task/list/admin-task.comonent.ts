@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AdminTaskDeleteDialogComponent } from '../delete/admin-task-delete-dialog.component';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
+import {UserTaskService} from "../../../user/user-task.service";
 
 @Component({
   selector: 'jhi-admin-task',
@@ -73,6 +74,8 @@ export class AdminTaskComponent implements OnInit {
       },
     });
   }
+
+
 
   private handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {

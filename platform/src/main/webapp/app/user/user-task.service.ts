@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {HttpClient, HttpEvent, HttpResponse} from '@angular/common/http';
 import { ApplicationConfigService } from '../core/config/application-config.service';
 import { Observable } from 'rxjs';
@@ -15,10 +15,12 @@ export class UserTaskService {
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/user_task');
   private resourceUrlSetCorrect = this.applicationConfigService.getEndpointFor('api/user_task/set_correct');
   private resourceUrlCorrect = this.applicationConfigService.getEndpointFor('api/files/file_correction');
+  private resourceUrlSolvedExercises = this.applicationConfigService.getEndpointFor('api/user_task/solved_exercises');
+  private test !: Observable<number>;
 
 
 
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService, private zone: NgZone) {}
 
   create(userTask: IUserTask): Observable<IUserTask> {
     return this.http.post<IUserTask>(this.resourceUrl, userTask);
@@ -48,6 +50,18 @@ export class UserTaskService {
 
   setCorrect(id: number): Observable<IUserTask>{
     return this.http.get<IUserTask>(`${this.resourceUrlSetCorrect}/${id}`);
+  }
+
+  // getCorrectExercises(id: number): Observable<number> {
+  //   return this.http.get<number>(`${this.resourceUrlSolvedExercises}/${id}`);
+  // }
+
+  // public getCorrectExercises(id: number): Observable<number> {
+  //    return  this.http.get<number>(`${this.resourceUrlSolvedExercises}/${id}`);
+  // }
+
+  public getCorrectExercises(id: number): Observable<string> {
+    return  this.http.get<string>(`${this.resourceUrlSolvedExercises}/${id}`, { responseType: 'text' as 'json' });
   }
 
   delete(id: number): Observable<{}> {
