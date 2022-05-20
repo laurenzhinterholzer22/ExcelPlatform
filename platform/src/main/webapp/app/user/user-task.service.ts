@@ -52,16 +52,9 @@ export class UserTaskService {
     return this.http.get<IUserTask>(`${this.resourceUrlSetCorrect}/${id}`);
   }
 
-  // getCorrectExercises(id: number): Observable<number> {
-  //   return this.http.get<number>(`${this.resourceUrlSolvedExercises}/${id}`);
-  // }
 
-  // public getCorrectExercises(id: number): Observable<number> {
-  //    return  this.http.get<number>(`${this.resourceUrlSolvedExercises}/${id}`);
-  // }
-
-  public getCorrectExercises(id: number): Observable<string> {
-    return  this.http.get<string>(`${this.resourceUrlSolvedExercises}/${id}`, { responseType: 'text' as 'json' });
+  public getCorrectExercises(id: number): Observable<number> {
+    return  this.http.get<number>(`${this.resourceUrlSolvedExercises}/${id}`);
   }
 
   delete(id: number): Observable<{}> {
