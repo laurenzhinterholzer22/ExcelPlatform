@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="myAdminTaskLabel">Beispiel lösen</h2>
 
       <div *ngIf="adminTask">
@@ -10,6 +10,8 @@
           <label>Beispielname</label>
           <input type="text" class="form-control" name="name" value="{{adminTask?.name}}" readonly />
         </div>
+
+
 
 
 
@@ -45,17 +47,43 @@
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
+<!--        <button-->
+<!--          type="submit"-->
+<!--          [disabled]="-->
+<!--            editForm.invalid ||-->
+<!--            isSaving ||-->
+<!--            uploadFileIdSubmissionExcel == -1 ||-->
+<!--            uploadFileIdSubmissionExcel == -2 ||-->
+<!--            isSaved-->
+<!--          "-->
+<!--          (click)="isSaved = true;"-->
+<!--          class="btn btn-primary"-->
+<!--        >-->
         <button
           type="submit"
           [disabled]="
             editForm.invalid ||
             isSaving ||
-            uploadFileIdSubmissionExcel == -1
-          "
+            uploadFileIdSubmissionExcel == -1 ||
+            uploadFileIdSubmissionExcel == -2
+           "
           class="btn btn-primary"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
+<!--        <br>-->
+<!--        <br>-->
+<!--        <button-->
+<!--          type="submit"-->
+<!--          [disabled]="-->
+<!--            editForm.invalid ||-->
+<!--            isSaving ||-->
+<!--            uploadFileIdSubmissionExcel == -1-->
+<!--          "-->
+<!--          class="btn btn-primary"-->
+<!--        >-->
+<!--          <span (click)="alertFunction()">Abgabe überprüfen</span>-->
+<!--        </button>-->
       </div>
     </form>
   </div>

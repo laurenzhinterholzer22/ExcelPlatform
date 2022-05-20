@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpResponse} from '@angular/common/http';
 import { ApplicationConfigService } from '../core/config/application-config.service';
 import { Observable } from 'rxjs';
 import { Pagination } from '../core/request/request.model';
@@ -13,7 +13,10 @@ export class UserTaskService {
   // extra resourceUrl for the DTO Object
   private resourceUrlDTO = this.applicationConfigService.getEndpointFor('api/user_task_meta');
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/user_task');
+  private resourceUrlSetCorrect = this.applicationConfigService.getEndpointFor('api/user_task/set_correct');
   private resourceUrlCorrect = this.applicationConfigService.getEndpointFor('api/files/file_correction');
+
+
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
@@ -35,16 +38,16 @@ export class UserTaskService {
     return this.http.get<IUserTaskMeta[]>(this.resourceUrlDTO, { params: options, observe: 'response' });
   }
 
-   public getCorrectUserTask(id: number): Observable<string> {
-     return this.http.get<string>(`${this.resourceUrlCorrect}/${id}`);
+  public getCorrectUserTask(id: number): Observable<string> {
+     return this.http.get<string>(`${this.resourceUrlCorrect}/${id}`,{ responseType: 'text' as 'json' });
   }
-
-  // public getCorrectUserTask(id: number): Observable<any> {
-  //   return this.http.get(`${this.resourceUrlCorrect}/${id}`);
-  // }
 
   update(userTask: IUserTask): Observable<IUserTask> {
     return this.http.put<IUserTask>(this.resourceUrl, userTask);
+  }
+
+  setCorrect(id: number): Observable<IUserTask>{
+    return this.http.get<IUserTask>(`${this.resourceUrlSetCorrect}/${id}`);
   }
 
   delete(id: number): Observable<{}> {

@@ -48,9 +48,19 @@ export class DoneTasksUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     this.updateUserTask(this.userTask);
-    this.userTaskService.update(this.userTask).subscribe({
-      next: () => this.onSaveSuccess(),
-      error: () => this.onSaveError(),
+    this.userTaskService.update(this.userTask).subscribe( data => {
+      if (data.id !== undefined) {
+        this.userTaskService.getCorrectUserTask(data.id).subscribe(dat => {
+          console.log(dat);
+          if (dat === "Berechnung korrekt") {
+            if (data.id !== undefined) {
+              this.userTaskService.setCorrect(data.id).subscribe(da => console.log(da));
+            }
+          }
+        });
+      }
+      this.onSaveSuccess();
+      this.onSaveError();
     });
   }
 

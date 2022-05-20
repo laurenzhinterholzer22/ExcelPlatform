@@ -55,9 +55,9 @@ public class UserTaskResource {
         );
         return ResponseEntity
             .created(new URI(""))
-            .headers(HeaderUtil.createAlert(applicationName, "User Task created", userTask.getUser().getId().toString()))
+//            .headers(HeaderUtil.createAlert(applicationName, "User Task created", userTask.getUser().getId().toString()))
             .body(newUserTask);
-        
+
     }
 
     @GetMapping("/user_task")
@@ -100,6 +100,24 @@ public class UserTaskResource {
         );
         return ResponseUtil.wrapOrNotFound(updatedUserTask);
     }
+
+    @GetMapping("/user_task/set_correct/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
+    public ResponseEntity<UserTask> setUserTaskCorrect(@PathVariable long id) {
+        Optional<UserTask> updatedUserTask = Optional.ofNullable(
+            userTaskService.setUserTaskCorrect(id)
+        );
+        return ResponseUtil.wrapOrNotFound(updatedUserTask);
+    }
+
+//    @GetMapping("/user_task/solved_exercises/{id}")
+//    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
+//    public ResponseEntity<Integer> getSolvedExercises(@PathVariable long id) {
+//        return ResponseUtil.wrapOrNotFound(userTaskService.getSolvedExercises(id));
+//    }
+
+
+
 
     @DeleteMapping("/user_task/{id}")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")

@@ -23,8 +23,8 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th><span>Beispiel Name</span></th>
-          <th><span>Angabe Excel</span></th>
           <th><span>Angabe PDF</span></th>
+          <th><span>Angabe Excel</span></th>
           <th><span>Lösung Excel</span></th>
           <th scope="col"></th>
         </tr>
@@ -36,13 +36,15 @@
           <!--        <td *ngIf="adminTask.pop() !== undefined">-->
           <!--            <jhi-file-download [fileId]="adminTask.instruction_excel"> </jhi-file-download>-->
           <!--        </td>-->
+          <td *ngIf="adminTask.instruction_pdf != undefined">
+            <jhi-file-download [fileId]="adminTask.instruction_pdf"> </jhi-file-download>
+          </td>
+
           <td *ngIf="adminTask.instruction_excel != undefined">
             <jhi-file-download [fileId]="adminTask.instruction_excel"> </jhi-file-download>
           </td>
 
-          <td *ngIf="adminTask.instruction_pdf != undefined">
-            <jhi-file-download [fileId]="adminTask.instruction_pdf"> </jhi-file-download>
-          </td>
+
 
           <td *ngIf="adminTask.solution_excel != undefined">
             <jhi-file-download [fileId]="adminTask.solution_excel"> </jhi-file-download>

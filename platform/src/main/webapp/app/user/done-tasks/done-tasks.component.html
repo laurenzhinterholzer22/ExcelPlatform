@@ -20,8 +20,8 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th><span>Beispiel Name</span></th>
-          <th><span>Angabe Excel</span></th>
           <th><span>Angabe PDF</span></th>
+          <th><span>Angabe Excel</span></th>
           <th><span>Abgabe Excel</span></th>
           <th><span>Beispiel richtig?</span></th>
           <th scope="col"></th>
@@ -32,13 +32,13 @@
           <ng-container *ngIf="userTaskMeta?.user_id == currentAccount?.id">
             <td>{{ userTaskMeta.id }}</td>
             <td>{{ userTaskMeta.admin_task_name }}</td>
+            <td *ngIf="userTaskMeta.instruction_pdf != undefined">
+              <jhi-file-download [fileId]="userTaskMeta.instruction_pdf"> </jhi-file-download>
+            </td>
             <td *ngIf="userTaskMeta.instruction_excel != undefined">
               <jhi-file-download [fileId]="userTaskMeta.instruction_excel"> </jhi-file-download>
             </td>
 
-            <td *ngIf="userTaskMeta.instruction_pdf != undefined">
-              <jhi-file-download [fileId]="userTaskMeta.instruction_pdf"> </jhi-file-download>
-            </td>
 
             <td *ngIf="userTaskMeta.submission_excel != undefined">
               <jhi-file-download [fileId]="userTaskMeta.submission_excel"> </jhi-file-download>

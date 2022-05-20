@@ -9,7 +9,7 @@ import {Account} from "../../../core/auth/account.model";
 import {AccountService} from "../../../core/auth/account.service";
 import {User} from "../../../entities/user/user.model";
 import {FileUploadService} from "../../../shared/file/file-upload/file-upload.service";
-import {date} from "@rxweb/reactive-form-validators";
+import {Subscriber} from "rxjs";
 
 @Component({
   selector: 'jhi-todo-tasks-update',
@@ -23,6 +23,9 @@ export class TodoTasksUpdateComponent implements OnInit {
   public uploadFileIdSubmissionExcel = -1;
   public currentAccount: Account | null = null;
   public userTaskCorrection !: UserTask;
+  public excelFeedback?: string;
+  public userTaskId?: number;
+  public isSaved = false;
 
   public editForm = this.fb.group({
     id: [],
@@ -54,12 +57,20 @@ export class TodoTasksUpdateComponent implements OnInit {
     this.updateUserTask(this.userTask);
     this.userTaskService.create(this.userTask).subscribe(data => {
       if (data.id !== undefined){
-        this.userTaskService.getCorrectUserTask(data.id).subscribe(dat => console.log(dat));
+        this.userTaskService.getCorrectUserTask(data.id).subscribe(dat => {
+          console.log(dat);
+          if (dat === "Berechnung korrekt") {
+            if (data.id !== undefined) {
+              this.userTaskService.setCorrect(data.id).subscribe(da => console.log(da));
+            }
+          }
+        });
       }
       this.onSaveSuccess();
       this.onSaveError();
     });
   }
+
 
 
   public updateUserTask(userTask: UserTask): void {

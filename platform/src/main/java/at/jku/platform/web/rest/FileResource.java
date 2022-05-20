@@ -12,15 +12,20 @@ import at.jku.platform.web.rest.errors.UserExtraNotExistsException;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.com.google.common.net.UrlEscapers;
+import tech.jhipster.web.util.HeaderUtil;
+
+import javax.mail.Header;
 
 @RestController
 @RequestMapping("/api/files")
@@ -28,6 +33,9 @@ public class FileResource {
 
     private final FileService fileService;
     private final UserService userService;
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     public FileResource(FileService fileService, UserService userService) {
         this.fileService = fileService;
@@ -112,16 +120,21 @@ public class FileResource {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("file_correction/{id}")
-    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<String> correctFile(@PathVariable long id) {
-        return ResponseEntity.of(fileService.correctFile(id));
-    }
-
 //    @GetMapping("file_correction/{id}")
 //    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
-//    public Optional<String> correctFile(@PathVariable long id) {
-//        return fileService.correctFile(id);
+//    public ResponseEntity<String> correctFile(@PathVariable long id) {
+//        return ResponseEntity
+//            .of(fileService.correctFile(id));
 //    }
+        @GetMapping("file_correction/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.USER + "\", \"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<String> correctFile(@PathVariable long id) {
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createAlert(applicationName, fileService.correctFile(id), Long.toString(id)))
+            .body(fileService.correctFile(id));
+    }
+
+
 
 }

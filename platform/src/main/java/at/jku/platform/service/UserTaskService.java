@@ -6,7 +6,11 @@ import at.jku.platform.service.dto.UserTaskDTO;
 import at.jku.platform.web.rest.errors.UserTaskDoesNotExistException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -55,7 +59,29 @@ public class UserTaskService {
         return userTask;
     }
 
-    @Transactional
+//    @Transactional
+//    public UserTask updateUserTask(
+//        long id,
+//        boolean isCorrect,
+//        AdminTask adminTask,
+//        File instruction_user_excel,
+//        File submission_excel,
+//        User user
+//    ) {
+//        UserTask userTask = userTaskRepository.getById(id);
+//        userTaskRepository.deleteById(id);
+//        userTaskRepository.flush();
+//        userTask.setCorrect(isCorrect);
+//        userTask.setAdminTask(adminTask);
+//        userTask.setInstruction_user_excel(instruction_user_excel);
+//        userTask.setSubmission_excel(submission_excel);
+//        userTask.setUser(user);
+//        userTaskRepository.save(userTask);
+//        logger.debug("Updated User Task: {}", userTask);
+//        return userTask;
+//    }
+
+        @Transactional
     public UserTask updateUserTask(
         long id,
         boolean isCorrect,
@@ -64,9 +90,9 @@ public class UserTaskService {
         File submission_excel,
         User user
     ) {
-        userTaskRepository.deleteById(id);
-        UserTask userTask = new UserTask();
-        userTask.setId(id);
+        UserTask userTask = userTaskRepository.getById(id);
+//        userTaskRepository.deleteById(id);
+//        userTaskRepository.flush();
         userTask.setCorrect(isCorrect);
         userTask.setAdminTask(adminTask);
         userTask.setInstruction_user_excel(instruction_user_excel);
@@ -76,6 +102,18 @@ public class UserTaskService {
         logger.debug("Updated User Task: {}", userTask);
         return userTask;
     }
+
+
+    @Transactional
+    public UserTask setUserTaskCorrect(long id) {
+        UserTask userTask = userTaskRepository.getById(id);
+//        userTaskRepository.deleteById(id);
+//        userTaskRepository.flush();
+        userTask.setCorrect(true);
+        userTaskRepository.save(userTask);
+        return userTask;
+    }
+
 
     @Transactional(readOnly = true)
     public UserTaskDTO getUserTaskMetaData(long id) throws UserTaskDoesNotExistException {
@@ -94,5 +132,19 @@ public class UserTaskService {
             userTaskDTOS.add(getUserTaskMetaData(userTask.getId()));
         }
         return new PageImpl<>(userTaskDTOS, pageable, userTaskDTOS.size());
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getSolvedExercises (Long id) {
+        int solved_exercises = 0;
+        List<UserTask> userTaskList = userTaskRepository.findAll();
+        for (UserTask userTask : userTaskList) {
+            if (Objects.equals(userTask.getUser().getId(), id)) {
+                if (userTask.isCorrect()) {
+                    solved_exercises += 1;
+                }
+            }
+        }
+        return solved_exercises;
     }
 }

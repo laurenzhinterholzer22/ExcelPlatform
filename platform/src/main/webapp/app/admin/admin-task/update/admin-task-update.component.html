@@ -29,16 +29,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="fileUploadInstructionExcel">Upload Angabe Excel: </label>
-          <jhi-file-upload
-            [disabled]="false"
-            id="fileUploadInstructionExcel"
-            [fileId]="uploadFileIdInstructionExcel"
-            (fileAdded)="handleFileAddedInstructionExcel($event)"
-            (fileRemoved)="handleFileRemovedInstructionExcel($event)"
-            (fileModified)="handleFileMovedInstructionExcel($event[0], $event[1])"
-          >
-          </jhi-file-upload>
           <label class="form-control-label" for="fileUploadInstructionPdf">Upload Angabe PDF: </label>
           <jhi-file-upload
             [disabled]="false"
@@ -48,6 +38,17 @@
             (fileRemoved)="handleFileRemovedInstructionPdf($event)"
             (fileModified)="handleFileMovedInstructionPdf($event[0], $event[1])"
           >
+          </jhi-file-upload>
+          <label class="form-control-label" for="fileUploadInstructionExcel">Upload Angabe Excel: </label>
+          <jhi-file-upload
+            [disabled]="false"
+            id="fileUploadInstructionExcel"
+            [fileId]="uploadFileIdInstructionExcel"
+            (fileAdded)="handleFileAddedInstructionExcel($event)"
+            (fileRemoved)="handleFileRemovedInstructionExcel($event)"
+            (fileModified)="handleFileMovedInstructionExcel($event[0], $event[1])"
+          >
+
           </jhi-file-upload>
           <label class="form-control-label" for="fileUploadSolutionExcel">Upload Lösung Excel: </label>
           <jhi-file-upload

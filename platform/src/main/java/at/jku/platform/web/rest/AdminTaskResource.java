@@ -79,7 +79,7 @@ public class AdminTaskResource {
         adminTaskService.removeAdminTask(id);
         return ResponseEntity
             .noContent()
-            .headers(HeaderUtil.createAlert(applicationName, "adminTaskManagement.deleted", id.toString()))
+            .headers(HeaderUtil.createAlert(applicationName, "AdminTask deleted", id.toString()))
             .build();
     }
 }

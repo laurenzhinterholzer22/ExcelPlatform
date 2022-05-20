@@ -12,6 +12,8 @@ import { User } from '../user-management.model';
 import { UserExtra } from '../user_extra-management.model';
 import { UserManagementDeleteDialogComponent } from '../delete/user-management-delete-dialog.component';
 import { User_extraManagementService } from '../service/user_extra-management.service';
+import {UserTask} from "../../../user/user-task.model";
+import {UserTaskService} from "../../../user/user-task.service";
 
 @Component({
   selector: 'jhi-user-mgmt',
@@ -27,10 +29,12 @@ export class UserManagementComponent implements OnInit {
   page!: number;
   predicate!: string;
   ascending!: boolean;
+  userTasks: UserTask [] | null = null;
 
   constructor(
     private userService: UserManagementService,
     private userExtraService: User_extraManagementService,
+    private userTaskService: UserTaskService,
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private router: Router,

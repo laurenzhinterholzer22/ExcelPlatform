@@ -66,7 +66,7 @@ public class CompareExcelFiles {
 //            loesung.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
         return true;
     }
@@ -112,12 +112,14 @@ public class CompareExcelFiles {
                     try {
                         if (Objects.equals(color, "[255, 255, 0, 0]") && !(cell_abgabe.getNumericCellValue()* 1.01 >= cell_loesung.getNumericCellValue() && cell_abgabe.getNumericCellValue()* 0.99 <= cell_loesung.getNumericCellValue() )) {
                             String false_zw = CellUtil.getCell(cell_loesung.getRow(), cell_loesung.getColumnIndex() - 1).toString();
-                            info.append("Bitte überprüfen Sie ihr Zwischenergebnis: ").append(false_zw).append("\n");
+//                            info.append("Bitte überprüfen Sie ihr Zwischenergebnis: ").append(false_zw).append("\n");
+                            return "Abgabe nicht korrekt: Bitte überprüfen Sie ihr Zwischenergebnis " + false_zw;
                         }
                     }catch (Exception e) {
                         if (Objects.equals(color, "[255, 255, 0, 0]") && !Objects.equals(cell_abgabe.getStringCellValue(), cell_loesung.getStringCellValue())) {
                             String false_zw = CellUtil.getCell(cell_loesung.getRow(), cell_loesung.getColumnIndex() - 1).toString();
-                            info.append("Bitte überprüfen Sie ihr Zwischenergebnis: ").append(false_zw).append("\n");
+//                            info.append("Bitte überprüfen Sie ihr Zwischenergebnis: ").append(false_zw).append("\n");
+                            return "Abgabe nicht korrekt: Bitte überprüfen Sie ihr Zwischenergebnis " + false_zw;
                         }
                     }
 
@@ -127,9 +129,10 @@ public class CompareExcelFiles {
 //            loesung.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return "Ihre Abgabe enthält Syntaxfehler bitte füllen Sie nur die vorgesehenen Zellen aus";
         }
-        return info.toString();
+//        return info.toString();
+        return "Ihre Abgabe enthält Syntaxfehler bitte füllen Sie nur die vorgesehenen Zellen aus";
     }
 
     public static String wrongCell (String abgabe_directory, String loesung_directory) {

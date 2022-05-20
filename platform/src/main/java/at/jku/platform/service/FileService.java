@@ -75,7 +75,7 @@ public class FileService {
     }
 
 
-    public Optional<String> correctFile(long id) {
+    public String correctFile(long id) {
         UserTask userTask = userTaskRepository.getById(id);
         File submission = userTask.getSubmission_excel();
         File solution = userTask.getAdminTask().getSolution_excel();
@@ -86,15 +86,15 @@ public class FileService {
             XSSFWorkbook workbook_submission = new XSSFWorkbook(stream_submission);
 
             if (CompareExcelFiles.correctSolution(workbook_solution,workbook_submission)) {
-                return Optional.of("Berechnung korrekt");
+                return "Berechnung korrekt";
             }
             else {
-                return Optional.of(CompareExcelFiles.checkZwischenergebnis(workbook_solution, workbook_submission));
+                return CompareExcelFiles.checkZwischenergebnis(workbook_solution, workbook_submission);
             }
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return Optional.empty();
+                return "";
             }
     }
 }
