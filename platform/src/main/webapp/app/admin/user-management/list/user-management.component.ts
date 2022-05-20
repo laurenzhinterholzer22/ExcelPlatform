@@ -31,7 +31,6 @@ export class UserManagementComponent implements OnInit {
   predicate!: string;
   ascending!: boolean;
   userTasks: UserTask [] | null = null;
-  solvedExercises: number [] = [];
   solvedExercisesMap = new Map();
   solved !: number;
   counter =  -1;
@@ -142,7 +141,7 @@ export class UserManagementComponent implements OnInit {
           this.userTaskService.getCorrectExercises(user.id).subscribe(data =>this.solvedExercisesMap.set(user.id, data));
         }
       }
-      }
+    }
   }
 
   private onSuccessUserExtra(userExtras: UserExtra[] | null, headers: HttpHeaders): void {

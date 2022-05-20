@@ -112,7 +112,7 @@ public class UserTaskResource {
 
     @GetMapping("/user_task/solved_exercises/{id}")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
-    public ResponseEntity<Integer> getSolvedExercises(@PathVariable long id) {
+    public ResponseEntity<Double> getSolvedExercises(@PathVariable long id) {
         return ResponseEntity
             .ok()
             .body(userTaskService.getSolvedExercises(id));

@@ -50,20 +50,8 @@
           </td>
           <td>{{ user.login }}</td>
           <td>{{ user.email }}</td>
-<!--          <ng-container>{{increaseCounter()}}</ng-container>-->
-          <td>{{solvedExercisesMap.get(user.id)}}</td>
-<!--          <td>{{solvedExercises[1]}}</td>-->
+          <td>{{solvedExercisesMap.get(user.id)}} %</td>
 
-<!--          <td>-->
-<!--            <ng-container *ngFor="let userExtra of usersExtras; trackBy: trackIdentityUserExtra">-->
-<!--              <ng-container *ngIf="userExtra.id == user.id">{{ userExtra.solved_exercises }}</ng-container>-->
-<!--            </ng-container>-->
-<!--          </td>-->
-<!--              <td>{{solved}}</td>-->
-<!--          <td *ngIf="user.id !== undefined" [solvedExercises] = getSolvedExercises(user.id)>-->
-<!--&lt;!&ndash;            {{getSolvedExercises(user.id)}}&ndash;&gt;-->
-<!--            {{solvedExercises}}-->
-<!--          </td>-->
           <td>
             <button
               class="btn btn-danger btn-sm"

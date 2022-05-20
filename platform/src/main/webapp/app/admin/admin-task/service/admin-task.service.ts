@@ -11,6 +11,8 @@ export class AdminTaskService {
   // extra resourceUrl for the DTO Object
   private resourceUrlDTO = this.applicationConfigService.getEndpointFor('api/admin/admin_task_meta');
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/admin_task');
+  private resourceUrlNumberSolved = this.applicationConfigService.getEndpointFor('api/admin/admin_task/number_solved');
+
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
@@ -30,5 +32,9 @@ export class AdminTaskService {
 
   delete(id: number): Observable<{}> {
     return this.http.delete(`${this.resourceUrl}/${id}`);
+  }
+
+  getNumberSolved(id: number): Observable<number> {
+    return  this.http.get<number>(`${this.resourceUrlNumberSolved}/${id}`);
   }
 }

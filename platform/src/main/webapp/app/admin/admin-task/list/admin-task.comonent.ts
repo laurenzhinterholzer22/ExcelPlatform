@@ -24,6 +24,7 @@ export class AdminTaskComponent implements OnInit {
   page!: number;
   predicate!: string;
   ascending!: boolean;
+  numberSolvedMap = new Map();
 
   constructor(
     private adminTaskService: AdminTaskService,
@@ -99,5 +100,12 @@ export class AdminTaskComponent implements OnInit {
   private onSuccess(adminTasks: AdminTask[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.adminTasks = adminTasks;
+    if (this.adminTasks !== null) {
+      for (const adminTask of this.adminTasks) {
+        if (adminTask.id !== undefined) {
+          this.adminTaskService.getNumberSolved(adminTask.id).subscribe(data => this.numberSolvedMap.set(adminTask.id, data));
+        }
+      }
+    }
   }
 }

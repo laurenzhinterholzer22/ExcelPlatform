@@ -73,6 +73,16 @@ public class AdminTaskResource {
         return ResponseUtil.wrapOrNotFound(adminTaskService.getAdminTask(id));
     }
 
+    @GetMapping("/admin_task/number_solved/{id}")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
+    public ResponseEntity<Double> getNumberSolved(@PathVariable long id) {
+        return ResponseEntity
+            .ok()
+            .body(adminTaskService.getNumberSolved(id));
+    }
+
+
+
     @DeleteMapping("/admin_task/{id}")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<Void> deleteAdminTask(@PathVariable Long id) {
