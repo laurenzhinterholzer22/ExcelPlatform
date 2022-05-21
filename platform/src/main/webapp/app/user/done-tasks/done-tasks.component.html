@@ -17,20 +17,20 @@
   <div class="table-responsive" *ngIf="userTasksMeta">
     <table class="table table-striped" aria-describedby="admin-task-page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+<!--        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">-->
+<!--          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>-->
           <th><span>Beispiel Name</span></th>
           <th><span>Angabe PDF</span></th>
           <th><span>Angabe Excel</span></th>
           <th><span>Abgabe Excel</span></th>
           <th><span>Beispiel richtig?</span></th>
           <th scope="col"></th>
-        </tr>
+<!--        </tr>-->
       </thead>
       <tbody *ngIf="userTasksMeta">
         <tr *ngFor="let userTaskMeta of userTasksMeta">
           <ng-container *ngIf="userTaskMeta?.user_id == currentAccount?.id">
-            <td>{{ userTaskMeta.id }}</td>
+<!--            <td>{{ userTaskMeta.id }}</td>-->
             <td>{{ userTaskMeta.admin_task_name }}</td>
             <td *ngIf="userTaskMeta.instruction_pdf != undefined">
               <jhi-file-download [fileId]="userTaskMeta.instruction_pdf"> </jhi-file-download>
@@ -43,7 +43,15 @@
             <td *ngIf="userTaskMeta.submission_excel != undefined">
               <jhi-file-download [fileId]="userTaskMeta.submission_excel"> </jhi-file-download>
             </td>
-            <td>{{ userTaskMeta.is_correct }}</td>
+<!--            <td>{{ userTaskMeta.is_correct }}</td>-->
+            <td>
+              <ng-container *ngIf="userTaskMeta.is_correct">
+                &checkmark;
+              </ng-container>
+              <ng-container *ngIf="!userTaskMeta.is_correct">
+                &cross;
+              </ng-container>
+            </td>
 
             <td class="text-right">
               <div class="btn-group">

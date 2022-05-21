@@ -17,17 +17,17 @@
   <div class="table-responsive" *ngIf="adminTasks">
     <table class="table table-striped" aria-describedby="all-tasks-page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+<!--        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">-->
+<!--          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>-->
           <th><span>Beispiel Name</span></th>
           <th><span>Angabe PDF</span></th>
           <th><span>Angabe Excel</span></th>
           <th scope="col"></th>
-        </tr>
+<!--        </tr>-->
       </thead>
       <tbody *ngIf="adminTasks">
         <tr *ngFor="let adminTask of adminTasks">
-          <td>{{ adminTask.id }}</td>
+<!--          <td>{{ adminTask.id }}</td>-->
           <td>{{ adminTask.name }}</td>
           <td *ngIf="adminTask.instruction_pdf != undefined">
             <jhi-file-download [fileId]="adminTask.instruction_pdf"> </jhi-file-download>
