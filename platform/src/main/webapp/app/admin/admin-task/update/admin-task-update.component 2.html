@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myAdminTaskLabel">Admin Task ändern</h2>
+
+      <div *ngIf="adminTask">
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="!adminTask.id">
+          <label>ID</label>
+          <input type="text" class="form-control" name="id" formControlName="id" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Name</label>
+          <input type="text" class="form-control" name="name" formControlName="name" />
+
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> Diese Feld ist notwendig! </small>
+
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.maxlength">
+              Dieses Feld darf nicht mehr als 100 Zeichen beinhalten!
+            </small>
+
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.pattern">
+              Dieses Feld darf maximal 100 Zeichen beinhalten!
+            </small>
+          </div>
+        </div>
+
+<!--        <div class="form-group">-->
+<!--          <label class="form-control-label" for="fileUploadInstructionPdf">Upload Angabe PDF: </label>-->
+<!--          <jhi-file-upload-->
+<!--            [disabled]="false"-->
+<!--            id="fileUploadInstructionPdf"-->
+<!--            [fileId]="uploadFileIdInstructionPdf"-->
+<!--            (fileAdded)="handleFileAddedInstructionPdf($event)"-->
+<!--            (fileRemoved)="handleFileRemovedInstructionPdf($event)"-->
+<!--            (fileModified)="handleFileMovedInstructionPdf($event[0], $event[1])"-->
+<!--          >-->
+<!--          </jhi-file-upload>-->
+<!--          <label class="form-control-label" for="fileUploadInstructionExcel">Upload Angabe Excel: </label>-->
+<!--          <jhi-file-upload-->
+<!--            [disabled]="false"-->
+<!--            id="fileUploadInstructionExcel"-->
+<!--            [fileId]="uploadFileIdInstructionExcel"-->
+<!--            (fileAdded)="handleFileAddedInstructionExcel($event)"-->
+<!--            (fileRemoved)="handleFileRemovedInstructionExcel($event)"-->
+<!--            (fileModified)="handleFileMovedInstructionExcel($event[0], $event[1])"-->
+<!--          >-->
+
+<!--          </jhi-file-upload>-->
+<!--          <label class="form-control-label" for="fileUploadSolutionExcel">Upload Lösung Excel: </label>-->
+<!--          <jhi-file-upload-->
+<!--            [disabled]="false"-->
+<!--            id="fileUploadSolutionExcel"-->
+<!--            [fileId]="uploadFileIdSolutionExcel"-->
+<!--            (fileAdded)="handleFileAddedSolutionExcel($event)"-->
+<!--            (fileRemoved)="handleFileRemovedSolutionExcel($event)"-->
+<!--            (fileModified)="handleFileMovedSolutionExcel($event[0], $event[1])"-->
+<!--          >-->
+<!--          </jhi-file-upload>-->
+<!--        </div>-->
+
+<!--        <small-->
+<!--          class="form-text text-danger"-->
+<!--          *ngIf="uploadFileIdInstructionExcel == -1 || uploadFileIdInstructionPdf == -1 || uploadFileIdSolutionExcel == -1"-->
+<!--        >-->
+<!--          Bitte Laden Sie alle 3 Files hoch-->
+<!--        </small>-->
+<!--        <small-->
+<!--          class="form-text text-danger"-->
+<!--          *ngIf="uploadFileIdInstructionExcel == -2 || uploadFileIdInstructionPdf == -2 || uploadFileIdSolutionExcel == -2"-->
+<!--        >-->
+<!--          Bitte Laden Sie das richtige Dateiformat hoch (.xlsx für Biepsiele und .pdf für Angaben)-->
+<!--        </small>-->
+      </div>
+
+      <div *ngIf="adminTask">
+        <button type="button" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          [disabled]="
+            editForm.invalid ||
+            isSaving ||
+            uploadFileIdInstructionExcel < -1 ||
+            uploadFileIdInstructionPdf < -1 ||
+            uploadFileIdSolutionExcel < -1
+          "
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
