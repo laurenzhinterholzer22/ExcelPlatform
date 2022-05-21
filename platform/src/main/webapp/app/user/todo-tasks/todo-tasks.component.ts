@@ -7,7 +7,7 @@ import {AccountService} from "../../core/auth/account.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {HttpHeaders, HttpResponse} from "@angular/common/http";
-import {combineLatest} from "rxjs";
+import {combineLatest, elementAt} from "rxjs";
 import {UserTaskMeta} from "../user-task-meta.model";
 import {UserTaskService} from "../user-task.service";
 import {newArray} from "@angular/compiler/src/util";
@@ -41,6 +41,7 @@ export class TodoTasksComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => (this.currentAccount = account));
     this.handleNavigation();
+    this.loadAll();
   }
 
   loadAll(): void {
@@ -105,7 +106,10 @@ export class TodoTasksComponent implements OnInit {
   }
 
   private onSuccessAdmin(adminTasks: AdminTask[] | null, headers: HttpHeaders): void {
-    this.totalItems = Number(headers.get('X-Total-Count'));
+    // this.totalItems = Number(headers.get('X-Total-Count'));
+    if (this.adminTasksFiltered!== undefined) {
+      this.totalItems = this.adminTasksFiltered.length;
+    }
     this.adminTasks = adminTasks;
   }
 
