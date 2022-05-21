@@ -2,6 +2,7 @@ package at.jku.platform.service;
 
 import at.jku.platform.domain.*;
 import at.jku.platform.repository.AdminTaskRepository;
+import at.jku.platform.repository.FileRepository;
 import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.service.dto.UserTaskDTO;
 import at.jku.platform.web.rest.errors.UserTaskDoesNotExistException;
@@ -30,9 +31,12 @@ public class UserTaskService {
 
     private final AdminTaskRepository adminTaskRepository;
 
-    public UserTaskService(UserTaskRepository userTaskRepository, AdminTaskRepository adminTaskRepository) {
+    private final FileRepository fileRepository;
+
+    public UserTaskService(UserTaskRepository userTaskRepository, AdminTaskRepository adminTaskRepository, FileRepository fileRepository) {
         this.userTaskRepository = userTaskRepository;
         this.adminTaskRepository = adminTaskRepository;
+        this.fileRepository = fileRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +51,10 @@ public class UserTaskService {
 
     @Transactional
     public void removeUserTask(long id) {
+        UserTask userTask = userTaskRepository.getById(id);
         userTaskRepository.deleteById(id);
+        fileRepository.deleteById(userTask.getSubmission_excel().getId());
+        fileRepository.deleteById(userTask.getInstruction_user_excel().getId());
     }
 
     @Transactional
@@ -73,8 +80,10 @@ public class UserTaskService {
         User user
     ) {
         UserTask userTask = userTaskRepository.getById(id);
-//        userTaskRepository.deleteById(id);
-//        userTaskRepository.flush();
+        // delete the old submission file
+        if (userTask.getSubmission_excel() != submission_excel) {
+            fileRepository.deleteById(userTask.getSubmission_excel().getId());
+        }
         userTask.setCorrect(isCorrect);
         userTask.setAdminTask(adminTask);
         userTask.setInstruction_user_excel(instruction_user_excel);
@@ -89,8 +98,6 @@ public class UserTaskService {
     @Transactional
     public UserTask setUserTaskCorrect(long id) {
         UserTask userTask = userTaskRepository.getById(id);
-//        userTaskRepository.deleteById(id);
-//        userTaskRepository.flush();
         userTask.setCorrect(true);
         userTaskRepository.save(userTask);
         return userTask;

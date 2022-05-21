@@ -4,15 +4,20 @@ import at.jku.platform.config.Constants;
 import at.jku.platform.domain.Authority;
 import at.jku.platform.domain.User;
 import at.jku.platform.domain.UserExtra;
+import at.jku.platform.domain.UserTask;
 import at.jku.platform.repository.AuthorityRepository;
 import at.jku.platform.repository.UserExtraRepository;
 import at.jku.platform.repository.UserRepository;
+import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.security.AuthoritiesConstants;
 import at.jku.platform.security.SecurityUtils;
 import at.jku.platform.service.dto.AdminUserDTO;
 import at.jku.platform.service.dto.UserDTO;
 import java.time.Instant;
+import java.time.Year;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -39,6 +44,8 @@ public class UserService {
 
     private final UserExtraRepository userExtraRepository;
 
+    private final UserTaskRepository userTaskRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
@@ -50,13 +57,15 @@ public class UserService {
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         CacheManager cacheManager,
-        UserExtraRepository userExtraRepository
+        UserExtraRepository userExtraRepository,
+        UserTaskRepository userTaskRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
         this.userExtraRepository = userExtraRepository;
+        this.userTaskRepository = userTaskRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -304,9 +313,31 @@ public class UserService {
         return userRepository.findOneWithAuthoritiesByLogin(login);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Optional<User> getUserWithAuthorities() {
+
+        // Here I am deleting all the users (not admins) and their user_tasks after one year not modified. (this function is always called when someone logs in)
+
+        List<User> userList = userRepository.findAll();
+        for (User user : userList) {
+            if (!user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList()).contains("ROLE_ADMIN") && user.getLastModifiedDate() != null) {
+                if (user.getLastModifiedDate().plus(365, ChronoUnit.DAYS).isBefore(Instant.now())) {
+                    userRepository.deleteById(user.getId());
+                    List<UserTask> userTaskList = userTaskRepository.findAll();
+                    for (UserTask userTask : userTaskList) {
+                        if (Objects.equals(userTask.getUser().getId(), user.getId())) {
+                            userTaskRepository.deleteById(userTask.getId());
+                        }
+                    }
+                }
+            }
+        }
+
+
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+
+
+
     }
 
     /**

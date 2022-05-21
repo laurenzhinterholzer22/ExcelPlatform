@@ -4,6 +4,7 @@ import at.jku.platform.domain.AdminTask;
 import at.jku.platform.domain.File;
 import at.jku.platform.domain.UserTask;
 import at.jku.platform.repository.AdminTaskRepository;
+import at.jku.platform.repository.FileRepository;
 import at.jku.platform.repository.UserRepository;
 import at.jku.platform.repository.UserTaskRepository;
 import at.jku.platform.service.dto.AdminTaskDTO;
@@ -28,11 +29,13 @@ public class AdminTaskService {
     private final AdminTaskRepository adminTaskRepository;
     private final UserTaskRepository userTaskRepository;
     private final UserRepository userRepository;
+    private final FileRepository fileRepository;
 
-    public AdminTaskService(AdminTaskRepository adminTaskRepository, UserTaskRepository userTaskRepository, UserRepository userRepository) {
+    public AdminTaskService(AdminTaskRepository adminTaskRepository, UserTaskRepository userTaskRepository, UserRepository userRepository, FileRepository fileRepository) {
         this.adminTaskRepository = adminTaskRepository;
         this.userTaskRepository = userTaskRepository;
         this.userRepository = userRepository;
+        this.fileRepository = fileRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +50,11 @@ public class AdminTaskService {
 
     @Transactional
     public void removeAdminTask(long id) {
+        AdminTask adminTask = adminTaskRepository.getById(id);
         adminTaskRepository.deleteById(id);
+        fileRepository.deleteById(adminTask.getSolution_excel().getId());
+        fileRepository.deleteById(adminTask.getInstruction_excel().getId());
+        fileRepository.deleteById(adminTask.getInstruction_pdf().getId());
     }
 
     @Transactional
