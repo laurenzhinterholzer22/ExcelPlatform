@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, Resolve, Routes } from '@angular/router';
 import { AdminTaskComponent } from '../../admin/admin-task/list/admin-task.comonent';
-import { AdminTaskUpdateComponent } from '../../admin/admin-task/update/admin-task-update.component';
+import { AdminTaskNewComponent } from '../../admin/admin-task/new/admin-task-new.component';
 import { AdminTaskResolve } from '../../admin/admin-task/admin-task.route';
 import { AllTasksComponent } from './all-tasks.component';
 import { Injectable } from '@angular/core';

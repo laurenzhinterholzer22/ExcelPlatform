@@ -38,11 +38,14 @@
           <jhi-file-download [fileId]="adminTask.instruction_excel"> </jhi-file-download>
         </td>
 
-
-        <button type="submit" [routerLink]="['./', adminTask.id, 'new']" queryParamsHandling="merge" class="btn btn-primary btn-sm" [queryParams]="{adminTaskId:adminTask?.id, adminTaskName: adminTask?.name, adminTaskInstructionExcel: adminTask?.instruction_excel, adminTaskInstructionPdf: adminTask?.instruction_pdf} ">
-          <fa-icon icon="check"></fa-icon>
-          <span class="d-none d-md-inline">Beispiel lösen</span>
-        </button>
+        <td class="text-right">
+          <div class="btn-group">
+            <button type="submit" [routerLink]="['./', adminTask.id, 'new']" queryParamsHandling="merge" class="btn btn-primary btn-sm" [queryParams]="{adminTaskId:adminTask?.id, adminTaskName: adminTask?.name, adminTaskInstructionExcel: adminTask?.instruction_excel, adminTaskInstructionPdf: adminTask?.instruction_pdf} ">
+              <fa-icon icon="check"></fa-icon>
+              <span class="d-none d-md-inline">Beispiel lösen</span>
+            </button>
+          </div>
+        </td>
 
       </tr>
       </tbody>

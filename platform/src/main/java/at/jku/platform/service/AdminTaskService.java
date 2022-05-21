@@ -11,6 +11,7 @@ import at.jku.platform.service.dto.AdminTaskDTO;
 import at.jku.platform.web.rest.errors.AdminTaskDoesNotExistException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +53,15 @@ public class AdminTaskService {
     public void removeAdminTask(long id) {
         AdminTask adminTask = adminTaskRepository.getById(id);
         adminTaskRepository.deleteById(id);
-        fileRepository.deleteById(adminTask.getSolution_excel().getId());
-        fileRepository.deleteById(adminTask.getInstruction_excel().getId());
-        fileRepository.deleteById(adminTask.getInstruction_pdf().getId());
+        if (adminTask.getSolution_excel() != null) {
+            fileRepository.deleteById(adminTask.getSolution_excel().getId());
+        }
+        if (adminTask.getInstruction_excel() != null) {
+            fileRepository.deleteById(adminTask.getInstruction_excel().getId());
+        }
+        if (adminTask.getInstruction_pdf() != null) {
+            fileRepository.deleteById(adminTask.getInstruction_pdf().getId());
+        }
     }
 
     @Transactional
@@ -66,6 +73,25 @@ public class AdminTaskService {
         adminTask.setSolution_excel(solution_excel);
         adminTaskRepository.save(adminTask);
         logger.debug("Added new Admin Task: {}", adminTask);
+    }
+
+    @Transactional
+    public void updateAdminTask(AdminTask adminTask) {
+        AdminTask adminTask_old = adminTaskRepository.getById(adminTask.getId());
+        if (!Objects.equals(adminTask.getInstruction_pdf().getId(), adminTask_old.getInstruction_pdf().getId()) && adminTask_old.getInstruction_pdf() != null) {
+            fileRepository.deleteById(adminTask_old.getInstruction_pdf().getId());
+        }
+        if (!Objects.equals(adminTask.getInstruction_excel().getId(), adminTask_old.getInstruction_excel().getId()) && adminTask_old.getInstruction_excel() != null) {
+            fileRepository.deleteById(adminTask_old.getInstruction_excel().getId());
+        }
+        if (!Objects.equals(adminTask.getSolution_excel().getId(), adminTask_old.getSolution_excel().getId()) && adminTask_old.getSolution_excel() != null) {
+            fileRepository.deleteById(adminTask_old.getSolution_excel().getId());
+        }
+        adminTask_old.setName(adminTask.getName());
+        adminTask_old.setInstruction_pdf(adminTask.getInstruction_pdf());
+        adminTask_old.setInstruction_excel(adminTask.getInstruction_excel());
+        adminTask_old.setSolution_excel(adminTask.getSolution_excel());
+        adminTaskRepository.save(adminTask_old);
     }
 
     @Transactional(readOnly = true)
@@ -100,7 +126,6 @@ public class AdminTaskService {
         if (number_users == 0) {
             return 0.0;
         }
-//        return Math.round((number_solved/number_users) * 100.0) / 100.0 * 100.0;
         double returning = number_solved * 1.0 / number_users * 100.00;
         return Math.round(returning * 100.0)/100.0;
     }

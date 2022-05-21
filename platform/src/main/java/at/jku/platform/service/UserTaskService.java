@@ -81,7 +81,7 @@ public class UserTaskService {
     ) {
         UserTask userTask = userTaskRepository.getById(id);
         // delete the old submission file
-        if (userTask.getSubmission_excel() != submission_excel) {
+        if (userTask.getSubmission_excel() != submission_excel && userTask.getSubmission_excel() != null) {
             fileRepository.deleteById(userTask.getSubmission_excel().getId());
         }
         userTask.setCorrect(isCorrect);

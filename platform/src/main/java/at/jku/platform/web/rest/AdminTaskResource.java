@@ -51,6 +51,16 @@ public class AdminTaskResource {
             .build();
     }
 
+    @PutMapping("/admin_task")
+    @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
+    public ResponseEntity<AdminTask> updateAdminTask(@Valid @RequestBody AdminTask adminTask) {
+        adminTaskService.updateAdminTask(adminTask);
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "AdminTask updated", adminTask.getName()))
+            .build();
+    }
+
     @GetMapping("/admin_task")
     @PreAuthorize("hasAnyAuthority(\"" + AuthoritiesConstants.ADMIN + "\", \"" + AuthoritiesConstants.USER + "\")")
     public ResponseEntity<List<AdminTask>> getAllAdminTasks(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {

@@ -20,6 +20,10 @@ export class AdminTaskService {
     return this.http.post<IAdminTask>(this.resourceUrl, adminTask);
   }
 
+  update(adminTask: IAdminTask): Observable<IAdminTask> {
+    return this.http.put<IAdminTask>(this.resourceUrl, adminTask);
+  }
+
   find(id: number): Observable<IAdminTask> {
     return this.http.get<IAdminTask>(`${this.resourceUrl}/${id}`);
   }
